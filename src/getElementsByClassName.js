@@ -5,22 +5,27 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className) {
-  var finalResults = [];
+  var results = [];
 
   function searchChildren(node) {
-    if (!node.hasChildNodes) {
+    //if node has a class list
+    if (node.classList) {
+      //check if node classList contains className
       if (node.className.includes(className)) {
-        finalResults.push(node);
-      }
-    } else {
-      if (node.className.includes(className)) {
-        finalResults.push(node);
-      }
-      for (var i = 0; i < node.children.length; i++) {
-        searchChildren(node.children[i]);
+        //if it does, push that node to results
+        results.push(node);
       }
     }
-  }
+    //if that node has childNodes
+    if (node.childNodes)
+    //use a for loop to check if node has children
+      for (var i = 0; i < node.childNodes.length; i++) {
+        //if it does, recursively check if those children have children
+        searchChildren(node.childNodes[i]);
+      }
+    }
+    //call function on entire document.body to start and ensure all nodes are checked
   searchChildren(document.body);
-  return finalResults;
+  //return all nodes that contain passed in className
+  return results;
 };
